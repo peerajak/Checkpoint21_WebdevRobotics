@@ -2,8 +2,9 @@
 
 <head>
     <!-- Bootstrap -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
-     crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <!-- ROS stuff -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/easeljs/lib/easeljs.min.js">
 
@@ -17,14 +18,44 @@
     <!-- Vuejs -->
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js">
     </script>
-	</script>
+    </script>
     <!-- mjpeg -->
-	<script type="text/javascript" src="mjpegcanvas.min.js">
-	</script>
+    <script type="text/javascript" src="mjpegcanvas.min.js">
+    </script>
     <!-- map -->
     </script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/ros2d/build/ros2d.min.js">
     </script>
+
+    <style type="text/css">
+            #dragstartzone {
+                position: relative;
+                display: inline-block;
+                width: 200px;
+                height: 200px;
+                border: 1px solid #333;
+                border-radius: 50%;
+                z-index: 10;
+                -moz-user-select: -moz-none;
+                -khtml-user-select: none;
+                -webkit-user-select: none;
+            }
+
+            #dragCircle {
+                position: absolute;
+                z-index: 9;
+                border: 1px solid transparent;
+                border-radius: 50%;
+                background-color: rgba(0, 0, 0, 30%);
+                -moz-user-select: -moz-none;
+                -khtml-user-select: none;
+                -webkit-user-select: none;
+            }
+
+            #dragCircle:hover {
+                background-color: lightcoral;
+            }
+        </style>
 </head>
 
 <body>
@@ -72,8 +103,8 @@
                                 <h4>Generated Map</h4>
                             </div>
                             <div class="card-body">
-                                <button :disabled="!connected" @click="showMap"  v-if="!isShowMap">Turn On Map</button>
-                                <button :disabled="!connected" @click="closeMap"  v-else>Turn Off Map</button>
+                                <button :disabled="!connected" @click="showMap" v-if="!isShowMap">Turn On Map</button>
+                                <button :disabled="!connected" @click="closeMap" v-else>Turn Off Map</button>
                             </div>
                         </div>
                     </div>
@@ -86,8 +117,9 @@
                             </div>
                             <div class="card-body">
                                 <div id="cameraButton">
-                                    <button :disabled="!connected" @click="showCamera"  v-if="!isShowCamera">Turn On Camera</button>
-                                    <button :disabled="!connected" @click="closeCamera"  v-else>Turn Off Camera</button>
+                                    <button :disabled="!connected" @click="showCamera" v-if="!isShowCamera">Turn On
+                                        Camera</button>
+                                    <button :disabled="!connected" @click="closeCamera" v-else>Turn Off Camera</button>
                                 </div>
                             </div>
                         </div>
@@ -102,26 +134,56 @@
                         </div>
                     </div>
                 </div>
-                    <div id="divCamera" :class="{ invisible: !isShowCamera }"></div>
-                    <div id="divMap" :class="{ invisible: !isShowMap }"></div>
+                <div class="row">
+                    <div class="card mt-2">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <h2 class="text-center">Joystick</h2>
+                                <hr>
+                                <p>Some actions for the robot</p>
+                                <div id="dragstartzone" @mousedown="startDrag" @mousemove="doDrag">
+                                </div>
+                                <div id="dragCircle" :style="dragCircleStyle"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card mt-2">
+                        <div class="card">
+                            <div class="card-body">
+                                <h2 class="text-center">Joystick values</h2>
+                                <hr />
+                                <p>Vertical: {{ joystick.vertical.toFixed(3) }}</p>
+                                <br />
+                                <p>Horizontal: {{ joystick.horizontal.toFixed(3) }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="card mt-2">
+                        <div id="divCamera" :class="{ invisible: !isShowCamera }"></div>
+                    </div>
+                    <div class="card mt-2">
+                        <div id="divMap" :class="{ invisible: !isShowMap }"></div>
+                    </div>
+                </div>
             </div>
-        </div>            
-    </div>
-
-        
+        </div>
 
 
-    <script type="text/javascript">
-        // We could have loaded main.js simply with:
-        //  <script type="text/javascript" src="main.js">
-        //
-        // BUT we were having caching-related problems.
-        // Loading main.js with a Date.now() in the URL we avoid using cache
-      var script = document.createElement('script');
-        script.type = 'text/javascript';
-        script.src = 'main.js?v=11.' + Date.now();
-        document.head.appendChild(script);
-    </script>
+
+
+        <script type="text/javascript">
+            // We could have loaded main.js simply with:
+            //  <script type="text/javascript" src="main.js">
+            //
+            // BUT we were having caching-related problems.
+            // Loading main.js with a Date.now() in the URL we avoid using cache
+            var script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.src = 'main.js?v=11.' + Date.now();
+            document.head.appendChild(script);
+        </script>
 </body>
 
 </html>

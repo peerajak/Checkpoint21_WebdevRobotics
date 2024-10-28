@@ -13,6 +13,23 @@ var app = new Vue({
         mapGridClient: null,
         rosbridge_address: 'wss://i-083e6ce4d6d7ab013.robotigniteacademy.com/153e62fb-e9ca-4d72-85a0-920258369a62/rosbridge/',
         port: '9090',
+        // dragging data
+        dragging: false,
+        x: 'no',
+        y: 'no',
+        dragCircleStyle: {
+            margin: '0px',
+            top: '0px',
+            left: '0px',
+            display: 'none',
+            width: '75px',
+            height: '75px',
+        },
+        // joystick valules
+        joystick: {
+            vertical: 0,
+            horizontal: 0,
+        },
     },
     // helper methods to connect to ROS
     methods: {
@@ -90,10 +107,49 @@ var app = new Vue({
             }
 
         },
+        startDrag() {
+            this.dragging = true
+            this.x = this.y = 0
+        },
+        stopDrag() {
+            this.dragging = false
+            this.x = this.y = 'no'
+            this.dragCircleStyle.display = 'none'
+            this.resetJoystickVals()
+        },
+        doDrag(event) {
+            if (this.dragging) {
+                this.x = event.offsetX
+                this.y = event.offsetY
+                let ref = document.getElementById('dragstartzone')
+                this.dragCircleStyle.display = 'inline-block'
+
+                let minTop = ref.offsetTop - parseInt(this.dragCircleStyle.height) / 2
+                let maxTop = minTop + 200
+                let top = this.y + minTop
+                this.dragCircleStyle.top = `${top}px`
+
+                let minLeft = ref.offsetLeft - parseInt(this.dragCircleStyle.width) / 2
+                let maxLeft = minLeft + 200
+                let left = this.x + minLeft
+                this.dragCircleStyle.left = `${left}px`
+
+                this.setJoystickVals()
+            }
+        },
+        setJoystickVals() {
+            this.joystick.vertical = -1 * ((this.y / 200) - 0.5)
+            this.joystick.horizontal = +1 * ((this.x / 200) - 0.5)
+        },
+        resetJoystickVals() {
+            this.joystick.vertical = 0
+            this.joystick.horizontal = 0
+        },
         disconnect: function() {
             this.ros.close()
         },
     },
     mounted() {
+        window.addEventListener('mouseup', this.stopDrag)
     },
 })
