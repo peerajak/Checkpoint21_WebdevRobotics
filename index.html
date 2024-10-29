@@ -63,6 +63,90 @@
         #dragCircle:hover {
             background-color: lightcoral;
         }
+        .image-container {
+        position: relative; /* set container to a relative position */
+        width: 480px; /* set your desired width */
+        height: 600px; /* set your desired height */
+        }
+
+        .waypoint_button {  
+        /*position: absolute; /* set button to an absolute position 
+        top: 50%; /* adjust the top position of the button 
+        left: 50%; /* adjust the left position of the button 
+        transform: translate(-50%, -50%); /* center the button */
+        font-size: 12px;
+        z-index: 2; /* set a higher z-index than the image */
+        background-color: red; /* set your desired background color */
+        color: #fff; /* set your desired text color */
+        border: none; /* remove button border */
+        padding: 10px 10px; /* set your desired padding */
+        box-shadow: 0 2px 4px darkslategray;
+        cursor: pointer; /* change mouse cursor on hover */
+        transition: all 0.2s ease;
+        border-radius: 70%;
+        }
+
+        .waypoint_button:active {
+        background-color: #48abe0;
+        box-shadow: 0 0 2px darkslategray;
+        /* transform: translateX(1px); */
+        outline: none;
+        }
+
+        .waypoint_button#WP1 {
+        position: absolute; 
+        top: 85%; 
+        left: 18.4%; 
+        transform: translate(-50%, -50%);     
+        }
+        .waypoint_button#WP2 {
+        position: absolute; 
+        top: 85%; 
+        left: 80%; 
+        transform: translate(-50%, -50%);     
+        }
+        .waypoint_button#WP3 {
+        position: absolute; 
+        top: 62.5%; 
+        left: 80%; 
+        transform: translate(-50%, -50%);     
+        }
+        .waypoint_button#WP4 {
+        position: absolute; 
+        top: 62.5%; 
+        left: 50%; 
+        transform: translate(-50%, -50%);     
+        }
+        .waypoint_button#WP5 {
+        position: absolute; 
+        top: 40.6%; 
+        left: 50%; 
+        transform: translate(-50%, -50%);     
+        }
+        .waypoint_button#WP6 {
+        position: absolute; 
+        top: 40.6%; 
+        left: 18.4%; 
+        transform: translate(-50%, -50%);  
+        }   
+        .waypoint_button#WP7 {
+        position: absolute; 
+        top: 40.6%; 
+        left: 80%; 
+        transform: translate(-50%, -50%);     
+        }
+        .waypoint_button#WP8 {
+        position: absolute; 
+        top: 24%; 
+        left: 15%; 
+        transform: translate(-50%, -50%);     
+        }
+        .waypoint_button#WP9 {
+        position: absolute; 
+        top: 15.5%; 
+        left: 80%; 
+        transform: translate(-50%, -50%);     
+        }
     </style>
 </head>
 
@@ -172,16 +256,32 @@
                         </div>
                     </div>
                     <div class="card mt-2">
-                        <div id="divCamera" :class="{ invisible: !isShowCamera }"></div>
+                        <div class="card">
+                            <div class="image-container">
+                                <img src="waypoint_button_map.png" alt="Waypoint Map">
+                                <button class="waypoint_button" id="WP1">WP1</button>
+                                <button class="waypoint_button" id="WP2">WP2</button>
+                                <button class="waypoint_button" id="WP3">WP3</button>
+                                <button class="waypoint_button" id="WP4">WP4</button>
+                                <button class="waypoint_button" id="WP5">WP5</button>
+                                <button class="waypoint_button" id="WP6">WP6</button>
+                                <button class="waypoint_button" id="WP7">WP7</button>
+                                <button class="waypoint_button" id="WP8">WP8</button>
+                                <button class="waypoint_button" id="WP9">WP9</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="row">
 
-                    <div class="card mt-2">
+                    <div class="card mt-4">
                         <div id="divMap" :class="{ invisible: !isShowMap }"></div>
                     </div>
-                    <div class="card mt-2">
+                    <div class="card mt-4">
                         <div id="div3DViewer" :class="{ invisible: !isShowRobotModel }"></div>
+                    </div>
+                    <div class="card mt-4">
+                        <div id="divCamera" :class="{ invisible: !isShowCamera }"></div>
                     </div>
                 </div>
             </div>
