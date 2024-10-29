@@ -31,6 +31,8 @@ var app = new Vue({
             vertical: 0,
             horizontal: 0,
         },
+        // publisher
+        pubInterval: null,
         // 3D stuff
         viewer3d: null,
         tfClient: null,
@@ -50,6 +52,7 @@ var app = new Vue({
                 this.isShowCamera = false
                 this.isShowMap = false
                 this.isShowRobotModel = false
+                this.pubInterval = setInterval(this.publish, 100)
             })
             this.ros.on('error', (error) => {
                 this.logs.unshift((new Date()).toTimeString() + ` - Error: ${error}`)
@@ -58,7 +61,8 @@ var app = new Vue({
                 this.logs.unshift((new Date()).toTimeString() + ' - Disconnected!')
                 this.connected = false
                 this.loading = false   
-                // this.unset3DViewer()           
+                this.unset3DViewer()  
+                clearInterval(this.pubInterval)         
             })
         },
         showMap: function(){
@@ -205,6 +209,33 @@ var app = new Vue({
         },
         unset3DViewer() {
             document.getElementById('div3DViewer').innerHTML = ''
+        },
+        publish: function() {
+            let topic = new ROSLIB.Topic({
+                ros: this.ros,
+                name: '/cmd_vel',
+                messageType: 'geometry_msgs/Twist'
+            })
+            let message = new ROSLIB.Message({
+                linear: { x: this.joystick.vertical, y: 0, z: 0, },
+                angular: { x: 0, y: 0, z: this.joystick.horizontal, },
+            })
+            topic.publish(message)
+        },
+        sendCommand: function() {
+            let topic = new ROSLIB.Topic({
+                ros: this.ros,
+                name: '/cmd_vel',
+                messageType: 'geometry_msgs/Twist'
+            })
+            let message = new ROSLIB.Message({
+                linear: { x: 1, y: 0, z: 0, },
+                angular: { x: 0, y: 0, z: 0.5, },
+            })
+            topic.publish(message)
+        },
+        disconnect: function() {
+            this.ros.close()
         },
     },
     mounted() {
