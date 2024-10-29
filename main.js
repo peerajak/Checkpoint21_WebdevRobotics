@@ -11,7 +11,7 @@ var app = new Vue({
         isShowCamera: false,
         mapViewer: null,
         mapGridClient: null,
-        rosbridge_address: 'wss://i-083e6ce4d6d7ab013.robotigniteacademy.com/153e62fb-e9ca-4d72-85a0-920258369a62/rosbridge/',
+        rosbridge_address: 'wss://i-03bed9fc61d80c81c.robotigniteacademy.com/720ef800-d461-4272-9ce1-b0694b11968a/rosbridge/',
         port: '9090',
         // dragging data
         dragging: false,
@@ -81,10 +81,11 @@ var app = new Vue({
                 rootObject: this.mapViewer.scene,
                 continuous: true,
             })
+            scaleFactor = 0.125
             // Scale the canvas to fit to the map
             this.mapGridClient.on('change', () => {
-                this.mapViewer.scaleToDimensions(this.mapGridClient.currentGrid.width, this.mapGridClient.currentGrid.height);
-                this.mapViewer.shift(this.mapGridClient.currentGrid.pose.position.x, this.mapGridClient.currentGrid.pose.position.y)
+                this.mapViewer.scaleToDimensions(this.mapGridClient.currentGrid.width*scaleFactor, this.mapGridClient.currentGrid.height*scaleFactor);
+                this.mapViewer.shift(this.mapGridClient.currentGrid.pose.position.x*scaleFactor, this.mapGridClient.currentGrid.pose.position.y*scaleFactor)
             })
             }
 

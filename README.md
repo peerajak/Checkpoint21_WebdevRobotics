@@ -35,6 +35,13 @@ cd ~/webpage_ws/tortoisebot_webapp
 python -m http.server 7000
 ```
 
+Terminal 6 Get address
+
+```
+rosbridge_address
+webpage_address
+```
+
 Teleopt commands
 
 ```
