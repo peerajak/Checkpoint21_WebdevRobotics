@@ -62,6 +62,8 @@ var app = new Vue({
                 this.connected = false
                 this.loading = false   
                 this.unset3DViewer()  
+                this.unsetCamera()
+                this.unsetMap()
                 clearInterval(this.pubInterval)         
             })
         },
@@ -71,6 +73,7 @@ var app = new Vue({
          },
         closeMap: function(){
             this.isShowMap = false
+            this.unsetMap()
         },
         showCamera: function() {
             this.setCamera()
@@ -78,6 +81,7 @@ var app = new Vue({
         },
         closeCamera: function() {
             this.isShowCamera = false
+            this.unsetCamera()
         },
         showRobotModel: function() {
             this.setup3DViewer()
@@ -85,6 +89,7 @@ var app = new Vue({
         },
         closeRobotModel: function () {
             this.isShowRobotModel = false
+            this.unset3DViewer()  
         },
         setMap: function(){
             if(this.mapViewer == null){
@@ -109,12 +114,13 @@ var app = new Vue({
 
         },
         setCamera: function() {
-            let without_wss = this.rosbridge_address.split('wss://')[1]
-            console.log(without_wss)
-            let domain = without_wss.split('/')[0] + '/' + without_wss.split('/')[1]
-            console.log(domain)
-            let host = domain + '/cameras'
+
             if(this.viewer == null){
+                let without_wss = this.rosbridge_address.split('wss://')[1]
+                console.log(without_wss)
+                let domain = without_wss.split('/')[0] + '/' + without_wss.split('/')[1]
+                console.log(domain)
+                let host = domain + '/cameras'
                 this.viewer = new MJPEGCANVAS.Viewer({
                 divID: 'divCamera',
                 host: host,
@@ -207,8 +213,17 @@ var app = new Vue({
 
 
         },
+        unsetMap() {
+            document.getElementById('divMap').innerHTML = ''
+            this.mapViewer = null
+        },
+        unsetCamera() {
+            document.getElementById('divCamera').innerHTML = ''
+            this.viewer = null
+        },
         unset3DViewer() {
             document.getElementById('div3DViewer').innerHTML = ''
+            this.viewer3d = null
         },
         publish: function() {
             let topic = new ROSLIB.Topic({
