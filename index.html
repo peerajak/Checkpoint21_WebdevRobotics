@@ -2,7 +2,7 @@
 
 <head>
     <!-- Bootstrap -->
-    
+
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <!-- ROS stuff -->
@@ -27,35 +27,43 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/ros2d/build/ros2d.min.js">
     </script>
 
+
+    <!-- 3D visualization -->
+    <script src="./libs/three.min.js"></script>
+    <script src="./libs/ColladaLoader.js"></script>
+    <script src="./libs/ColladaLoader2.js"></script>
+    <script src="./libs/STLLoader.js"></script>
+    <script src="./libs/ros3d.min.js"></script>
+
     <style type="text/css">
-            #dragstartzone {
-                position: relative;
-                display: inline-block;
-                width: 200px;
-                height: 200px;
-                border: 1px solid #333;
-                border-radius: 50%;
-                z-index: 10;
-                -moz-user-select: -moz-none;
-                -khtml-user-select: none;
-                -webkit-user-select: none;
-            }
+        #dragstartzone {
+            position: relative;
+            display: inline-block;
+            width: 200px;
+            height: 200px;
+            border: 1px solid #333;
+            border-radius: 50%;
+            z-index: 10;
+            -moz-user-select: -moz-none;
+            -khtml-user-select: none;
+            -webkit-user-select: none;
+        }
 
-            #dragCircle {
-                position: absolute;
-                z-index: 9;
-                border: 1px solid transparent;
-                border-radius: 50%;
-                background-color: rgba(0, 0, 0, 30%);
-                -moz-user-select: -moz-none;
-                -khtml-user-select: none;
-                -webkit-user-select: none;
-            }
+        #dragCircle {
+            position: absolute;
+            z-index: 9;
+            border: 1px solid transparent;
+            border-radius: 50%;
+            background-color: rgba(0, 0, 0, 30%);
+            -moz-user-select: -moz-none;
+            -khtml-user-select: none;
+            -webkit-user-select: none;
+        }
 
-            #dragCircle:hover {
-                background-color: lightcoral;
-            }
-        </style>
+        #dragCircle:hover {
+            background-color: lightcoral;
+        }
+    </style>
 </head>
 
 <body>
@@ -84,6 +92,7 @@
                         <p v-for="log in logs">{{ log }}</p>
                     </div>
                 </div>
+
             </div>
             <div class="col-9">
                 <h3>Controls</h3>
@@ -94,6 +103,10 @@
                                 <h4>Robot model</h4>
                             </div>
                             <div class="card-body">
+                                <button :disabled="!connected" @click="showRobotModel" v-if="!isShowRobotModel">Turn On
+                                    Robot Model</button>
+                                <button :disabled="!connected" @click="closeRobotModel" v-else>Turn Off 3D robot
+                                    Model</button>
                             </div>
                         </div>
                     </div>
@@ -158,13 +171,17 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="row">
                     <div class="card mt-2">
                         <div id="divCamera" :class="{ invisible: !isShowCamera }"></div>
                     </div>
+                </div>
+                <div class="row">
+
                     <div class="card mt-2">
                         <div id="divMap" :class="{ invisible: !isShowMap }"></div>
+                    </div>
+                    <div class="card mt-2">
+                        <div id="div3DViewer" :class="{ invisible: !isShowRobotModel }"></div>
                     </div>
                 </div>
             </div>

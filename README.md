@@ -35,7 +35,13 @@ cd ~/webpage_ws/tortoisebot_webapp
 python -m http.server 7000
 ```
 
-Terminal 6 Get address
+Terminal 6 tf2_web server
+
+```
+roslaunch course_web_dev_ros tf2_web.launch
+```
+
+Terminal 7 Get address
 
 ```
 rosbridge_address
