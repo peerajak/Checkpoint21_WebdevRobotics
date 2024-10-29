@@ -77,7 +77,7 @@ goal:
 
 ### Waypoints 
 
-![alt text](waypoint_button_map.png)
+![alt text](waypoint_with_buttons.png)
 
 
 Waypoint position Data 
