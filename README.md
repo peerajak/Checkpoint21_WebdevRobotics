@@ -75,6 +75,11 @@ goal:
     z: 0.0"
 ```
 
+### Waypoints 
+
+![alt text](waypoint_button_map.png)
+
+
 Waypoint position Data 
 
 wp : location x,y
