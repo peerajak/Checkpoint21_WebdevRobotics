@@ -12,7 +12,7 @@ var app = new Vue({
         isShowRobotModel: false,
         mapViewer: null,
         mapGridClient: null,
-        rosbridge_address: 'wss://i-03bed9fc61d80c81c.robotigniteacademy.com/720ef800-d461-4272-9ce1-b0694b11968a/rosbridge/',
+        rosbridge_address: 'wss://i-03368f9a04079b49f.robotigniteacademy.com/bcdafd5b-3f50-498f-b611-c0016bdd7e56/rosbridge/',
         port: '9090',
         // dragging data
         dragging: false,
@@ -37,10 +37,34 @@ var app = new Vue({
         viewer3d: null,
         tfClient: null,
         urdfClient: null,
+        //action server
+        goal: null,
+        action: {
+            goal: { position: {x: 0, y: 0, z: 0} },
+            feedback: { position: 0, state: 'idle' },
+            result: { success: false },
+            status: { status: 0, text: '' },
+        },
+        wp_array : [
+        [ 0.7, -0.48],
+        [ 0.680851835461391, 0.5046365559674899],
+        [ 0.23105951276897543, 0.5368169079826496],
+        [ 0.23105951276897543, 0.04812895919547926],
+        [ -0.13007296166597881, 0.010690406810986703],
+        [ -0.18288059001897242, -0.43215748770886586],
+        [ -0.15489504057272618, 0.4629887743221526],
+        [ -0.5495752177522534, -0.5476146745173234],
+        [ -0.6091414439352052, 0.49241421900139143]
+                ],
+        is_wp_array_reached : [false,false,false,false,false,false,false,false,false],
+        isOnAction : false,
+        nextWP: 1
+
     },
     // helper methods to connect to ROS
     methods: {
         connect: function() {
+            this.logs.unshift('connecting...')
             this.loading = true
             this.ros = new ROSLIB.Ros({
                 url: this.rosbridge_address
@@ -251,6 +275,48 @@ var app = new Vue({
         },
         disconnect: function() {
             this.ros.close()
+            this.goal = null
+        },
+        sendGoal: function() {
+            let actionClient = new ROSLIB.ActionClient({
+                ros : this.ros,
+                serverName : '/tortoisebot_as',
+                actionName : 'course_web_dev_ros/WaypointActionAction'
+            })
+
+            this.goal = new ROSLIB.Goal({
+                actionClient : actionClient,
+                goalMessage: {
+                    ...this.action.goal
+                }
+            })
+
+            this.goal.on('status', (status) => {
+                this.action.status = status
+            })
+
+            this.goal.on('feedback', (feedback) => {
+                this.action.feedback = feedback
+            })
+
+            this.goal.on('result', (result) => {
+                this.action.result = result 
+                this.isOnAction = false
+                
+            })
+            this.isOnAction = true
+            this.goal.send()
+        },
+        cancelGoal: function() {
+            this.goal.cancel()
+        },
+        WP_button_clicked: function (wpname) {
+            
+            let wpnum = parseInt(wpname.charAt(2))-1
+            this.logs.unshift(wpname + ": " + String(this.wp_array[wpnum][0]) + ',' +  String(this.wp_array[wpnum][1]))
+            this.action.goal.position.x = this.wp_array[wpnum][0]
+            this.action.goal.position.y = this.wp_array[wpnum][1]
+            this.sendGoal()
         },
     },
     mounted() {

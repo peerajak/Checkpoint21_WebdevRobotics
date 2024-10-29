@@ -69,6 +69,23 @@
         height: 600px; /* set your desired height */
         }
 
+        .cancel_waypoint_button {  
+        position: absolute;
+        top: 98%; 
+        left: 50%; 
+        transform: translate(-50%, -50%); 
+        font-size: 12px;
+        z-index: 2; /* set a higher z-index than the image */
+        background-color: blue; /* set your desired background color */
+        color: #fff; /* set your desired text color */
+        border: none; /* remove button border */
+        padding: 8px 8px; /* set your desired padding */
+        box-shadow: 0 2px 4px darkslategray;
+        cursor: pointer; /* change mouse cursor on hover */
+        transition: all 0.2s ease;
+        border-radius: 10%;
+        }
+
         .waypoint_button {  
         /*position: absolute; /* set button to an absolute position 
         top: 50%; /* adjust the top position of the button 
@@ -259,15 +276,16 @@
                         <div class="card">
                             <div class="image-container">
                                 <img src="waypoint_button_map.png" alt="Waypoint Map">
-                                <button class="waypoint_button" id="WP1">WP1</button>
-                                <button class="waypoint_button" id="WP2">WP2</button>
-                                <button class="waypoint_button" id="WP3">WP3</button>
-                                <button class="waypoint_button" id="WP4">WP4</button>
-                                <button class="waypoint_button" id="WP5">WP5</button>
-                                <button class="waypoint_button" id="WP6">WP6</button>
-                                <button class="waypoint_button" id="WP7">WP7</button>
-                                <button class="waypoint_button" id="WP8">WP8</button>
-                                <button class="waypoint_button" id="WP9">WP9</button>
+                                <button class="waypoint_button" id="WP1" :style="{'background-color': false ? '#FC4': '#CCC'}" :disabled="!connected || action.status.status == 1" @click="WP_button_clicked('WP1')">WP1</button>
+                                <button class="waypoint_button" id="WP2" :disabled="!connected || action.status.status == 1" @click="WP_button_clicked('WP2')">WP2</button>
+                                <button class="waypoint_button" id="WP3" :disabled="!connected || action.status.status == 1" @click="WP_button_clicked('WP3')">WP3</button>
+                                <button class="waypoint_button" id="WP4" :disabled="!connected || action.status.status == 1" @click="WP_button_clicked('WP4')">WP4</button>
+                                <button class="waypoint_button" id="WP5" :disabled="!connected || action.status.status == 1" @click="WP_button_clicked('WP5')">WP5</button>
+                                <button class="waypoint_button" id="WP6" :disabled="!connected || action.status.status == 1" @click="WP_button_clicked('WP6')">WP6</button>
+                                <button class="waypoint_button" id="WP7" :disabled="!connected || action.status.status == 1" @click="WP_button_clicked('WP7')">WP7</button>
+                                <button class="waypoint_button" id="WP8" :disabled="!connected || action.status.status == 1" @click="WP_button_clicked('WP8')">WP8</button>
+                                <button class="waypoint_button" id="WP9" :disabled="!connected || action.status.status == 1" @click="WP_button_clicked('WP9')">WP9</button>
+                                <button class="cancel_waypoint_button" :disabled="!connected || ![1].includes(action.status.status)" @click="cancelGoal">Cancel</button>
                             </div>
                         </div>
                     </div>
@@ -282,6 +300,46 @@
                     </div>
                     <div class="card mt-4">
                         <div id="divCamera" :class="{ invisible: !isShowCamera }"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 col-sm-6" style="overflow:auto;">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <h5>Action client data</h5>
+                        <div>
+                            <label>Goal</label>
+                            <div>
+                                <label>X</label>
+                                <input type="number" v-model.number="action.goal.position.x" />
+                            </div>
+                            <div>
+                                <label>Y</label>
+                                <input type="number" v-model.number="action.goal.position.y" />
+                            </div>
+                            <button :disabled="!connected || action.status.status == 1" @click="sendGoal">Start</button>
+                            <button :disabled="!connected || ![1].includes(action.status.status)" @click="cancelGoal">Cancel</button>
+                        </div>
+                        <hr />
+                        <div>
+                            <label class="text-muted">Feedback</label>
+                            <p>Position: {{ action.feedback.position }}</p>
+                            <p>State: {{ action.feedback.state }}</p>
+                        </div>
+                        <hr />
+                        <div>
+                            <label class="text-muted">Result</label>
+                            <p>Succeeded? {{ action.result.success }}</p>
+                        </div>
+                        <hr />
+                        <div>
+                            <label class="text-muted">Status</label>
+                            <p>{{ action.status.text }}</p>
+                        </div>
+                        <div>
+                            <label class="text-muted">Reach Successfully</label>
+                            <p>{{!isOnAction  && action.result.success }}</p>
+                        </div>
                     </div>
                 </div>
             </div>
