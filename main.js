@@ -12,7 +12,7 @@ var app = new Vue({
         isShowRobotModel: false,
         mapViewer: null,
         mapGridClient: null,
-        rosbridge_address: 'wss://i-03368f9a04079b49f.robotigniteacademy.com/bcdafd5b-3f50-498f-b611-c0016bdd7e56/rosbridge/',
+        rosbridge_address: 'wss://i-0e8a19a0d6284ed9c.robotigniteacademy.com/30c3b09d-6a0d-44c7-9520-6b7ee28bbab5/rosbridge/',
         port: '9090',
         // dragging data
         dragging: false,
@@ -50,7 +50,7 @@ var app = new Vue({
         [ 0.680851835461391, 0.5046365559674899],
         [ 0.23105951276897543, 0.5368169079826496],
         [ 0.23105951276897543, 0.04812895919547926],
-        [ -0.13007296166597881, 0.010690406810986703],
+        [ -0.15, 0.010690406810986703],
         [ -0.18288059001897242, -0.43215748770886586],
         [ -0.15489504057272618, 0.4629887743221526],
         [ -0.5495752177522534, -0.5476146745173234],
@@ -58,7 +58,7 @@ var app = new Vue({
                 ],
         is_wp_array_reached : [false,false,false,false,false,false,false,false,false],
         isOnAction : false,
-        nextWP: 1
+        WPnum: 1
 
     },
     // helper methods to connect to ROS
@@ -302,6 +302,12 @@ var app = new Vue({
             this.goal.on('result', (result) => {
                 this.action.result = result 
                 this.isOnAction = false
+                let wpnum_idx = this.WPnum - 1
+                if(this.action.result.success){
+                    this.is_wp_array_reached[wpnum_idx] = true
+                }else{
+                    this.is_wp_array_reached[wpnum_idx] = false
+                }
                 
             })
             this.isOnAction = true
@@ -310,12 +316,12 @@ var app = new Vue({
         cancelGoal: function() {
             this.goal.cancel()
         },
-        WP_button_clicked: function (wpname) {
-            
-            let wpnum = parseInt(wpname.charAt(2))-1
-            this.logs.unshift(wpname + ": " + String(this.wp_array[wpnum][0]) + ',' +  String(this.wp_array[wpnum][1]))
-            this.action.goal.position.x = this.wp_array[wpnum][0]
-            this.action.goal.position.y = this.wp_array[wpnum][1]
+        WP_button_clicked: function (wpname) {            
+            this.WPnum = parseInt(wpname.charAt(2))
+            let wpnum_idx = this.WPnum - 1
+            this.logs.unshift(wpname + ": " + String(this.wp_array[wpnum_idx][0]) + ',' +  String(this.wp_array[wpnum_idx][1]))
+            this.action.goal.position.x = this.wp_array[wpnum_idx][0]
+            this.action.goal.position.y = this.wp_array[wpnum_idx][1]
             this.sendGoal()
         },
     },
