@@ -11,11 +11,11 @@ Navigating the robot with button on the map.
 
 Waypoint buttons are shown in red. Once the robot successfully visited the button will turn green
 
-![alt text](Result_weypoint_button.png)
+![alt text](Result_waypoint_button.png)
 
 You may cancel the goal with Cancel button at the bottom of the map, while navigating only.
 
-![alt text](Result_weypoint_button_while_action.png)
+![alt text](Result_waypoint_button_while_action.png)
 
 Terminal 1 Simulator
 
