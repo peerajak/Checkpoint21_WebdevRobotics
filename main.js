@@ -7,12 +7,12 @@ var app = new Vue({
         viewer: null,
         logs: [],
         loading: false,
-        isShowMap: false,
-        isShowCamera: false,
-        isShowRobotModel: false,
+        isShowMap: true,
+        isShowCamera: true,
+        isShowRobotModel: true,
         mapViewer: null,
         mapGridClient: null,
-        rosbridge_address: 'wss://i-0e8a19a0d6284ed9c.robotigniteacademy.com/30c3b09d-6a0d-44c7-9520-6b7ee28bbab5/rosbridge/',
+        rosbridge_address: 'wss://i-044ca002c740c8699.robotigniteacademy.com/d3914234-3576-4419-a614-2c3450288207/rosbridge/',
         port: '9090',
         // dragging data
         dragging: false,
@@ -46,15 +46,15 @@ var app = new Vue({
             status: { status: 0, text: '' },
         },
         wp_array : [
-        [ 0.58, -0.48],
-        [ 0.58, 0.5046365559674899],
-        [ 0.23105951276897543, 0.5368169079826496],
-        [ 0.1743, 0.0135],
-        [ -0.1, 0.048],
-        [ -0.18288059001897242, -0.43215748770886586],
-        [ -0.15489504057272618, 0.4629887743221526],
-        [ -0.5495752177522534, -0.5476146745173234],
-        [ -0.65, 0.49]
+        [ 0.58, -0.48], // WP1
+        [ 0.58, 0.4], // WP2
+        [ 0.23105951276897543, 0.5368169079826496], // WP3
+        [ 0.1743, 0.0135], // WP4
+        [ -0.088,0.07436338290337982], // WP5
+        [ -0.18288059001897242, -0.43215748770886586], // WP6
+        [ -0.15489504057272618, 0.4629887743221526], // WP7
+        [ -0.5495752177522534, -0.5476146745173234], // WP8
+        [ -0.65, 0.49] // WP9
                 ],
         is_wp_array_reached : [false,false,false,false,false,false,false,false,false],
         isOnAction : false,
@@ -73,9 +73,9 @@ var app = new Vue({
                 this.logs.unshift((new Date()).toTimeString() + ' - Connected!')
                 this.connected = true
                 this.loading = false
-                this.isShowCamera = false
-                this.isShowMap = false
-                this.isShowRobotModel = false
+                this.showMap()
+                this.showCamera()
+                this.showRobotModel()
                 this.pubInterval = setInterval(this.publish, 100)
             })
             this.ros.on('error', (error) => {
@@ -92,48 +92,54 @@ var app = new Vue({
             })
         },
         showMap: function(){
-            this.isShowMap = true
             this.setMap()
          },
         closeMap: function(){
-            this.isShowMap = false
             this.unsetMap()
         },
         showCamera: function() {
             this.setCamera()
-            this.isShowCamera = true
         },
         closeCamera: function() {
-            this.isShowCamera = false
             this.unsetCamera()
         },
         showRobotModel: function() {
             this.setup3DViewer()
-            this.isShowRobotModel = true
         },
         closeRobotModel: function () {
-            this.isShowRobotModel = false
             this.unset3DViewer()  
         },
         setMap: function(){
             if(this.mapViewer == null){
                     this.mapViewer = new ROS2D.Viewer({
                     divID: 'divMap',
-                    width: 420,
-                    height: 360
+                    width: 340,
+                    height: 280
                 })
                         // Setup the map client.
             this.mapGridClient = new ROS2D.OccupancyGridClient({
                 ros: this.ros,
                 rootObject: this.mapViewer.scene,
-                continuous: true,
+                continuous: true                             
             })
-            scaleFactor = 0.125
+            scaleFactor = 1
+            shift_offset = 0
             // Scale the canvas to fit to the map
             this.mapGridClient.on('change', () => {
-                this.mapViewer.scaleToDimensions(this.mapGridClient.currentGrid.width*scaleFactor, this.mapGridClient.currentGrid.height*scaleFactor);
-                this.mapViewer.shift(this.mapGridClient.currentGrid.pose.position.x*scaleFactor, this.mapGridClient.currentGrid.pose.position.y*scaleFactor)
+            this.mapViewer.scaleToDimensions(this.mapGridClient.currentGrid.width*scaleFactor, this.mapGridClient.currentGrid.height*scaleFactor)
+            this.mapViewer.shift((this.mapGridClient.currentGrid.pose.position.x+shift_offset)*scaleFactor, (this.mapGridClient.currentGrid.pose.position.y-shift_offset)*scaleFactor)
+            /*var divmap = document.getElementById('divMap') 
+            var canvas = divmap.childNodes.item('canvas')
+            var context = canvas.getContext('2d');
+            context.save();
+            context.rotate(1.57);
+            context.restore
+            //canvas.width = 384;
+            //canvas.height = 384;
+            */
             })
+
+
             }
 
         },
@@ -148,8 +154,8 @@ var app = new Vue({
                 this.viewer = new MJPEGCANVAS.Viewer({
                 divID: 'divCamera',
                 host: host,
-                width: 320,
-                height: 240,
+                width: 400,
+                height: 300,
                 topic: '/camera/image_raw',
                 ssl: true,
             })
@@ -319,7 +325,7 @@ var app = new Vue({
         WP_button_clicked: function (wpname) {            
             this.WPnum = parseInt(wpname.charAt(2))
             let wpnum_idx = this.WPnum - 1
-            this.logs.unshift(wpname + ": " + String(this.wp_array[wpnum_idx][0]) + ',' +  String(this.wp_array[wpnum_idx][1]))
+            // this.logs.unshift(wpname + ": " + String(this.wp_array[wpnum_idx][0]) + ',' +  String(this.wp_array[wpnum_idx][1]))
             this.action.goal.position.x = this.wp_array[wpnum_idx][0]
             this.action.goal.position.y = this.wp_array[wpnum_idx][1]
             this.sendGoal()

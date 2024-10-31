@@ -63,10 +63,23 @@
         #dragCircle:hover {
             background-color: lightcoral;
         }
+
+        #divMap {
+            transform: rotate(90deg);
+            float: right;
+            height: 340px;
+        }
+
+        .grid-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-gap: 20px;
+        }
         .image-container {
         position: relative; /* set container to a relative position */
         width: 480px; /* set your desired width */
         height: 600px; /* set your desired height */
+        padding-left: 20px;
         }
 
         .cancel_waypoint_button {  
@@ -271,6 +284,46 @@
                     </div>
                 </div>
                 <div class="card mt-2">
+                    <div class="card">
+                        <div class="card-body">
+                            <h2 class="text-center">Joystick values</h2>
+                            <p>Vertical: {{ joystick.vertical.toFixed(3) }}</p>
+                            <p>Horizontal: {{ joystick.horizontal.toFixed(3) }}</p>
+                        </div>
+                    </div>                                
+                </div>
+                <div class="card mt-2">
+                     <div class="card">
+                        <div class="card-body">
+                            
+                            <h5>Action client data</h5>
+                              <div style="width: 40%; display: table-cell;">
+                                <div>
+                                    <label class="text-muted">Feedback</label>
+                                    <p>Position X: {{ parseFloat(action.feedback.position.x).toFixed(3) }}</p>
+                                    <p>Position Y: {{ parseFloat(action.feedback.position.y).toFixed(3) }}</p>
+                                    <p>State: {{ action.feedback.state }}</p>
+                                </div>
+                                <!-- div>
+                                <label class="text-muted">Result</label>
+                                    <p>Succeeded? {{ action.result.success }}</p>
+                                </div -->
+                              </div>
+                              <div style="display: table-cell;">
+                                <div>
+                                    <label class="text-muted">Status</label>
+                                    <p>{{ action.status.text }}</p>
+                                </div>
+                                <div>
+                                    <label class="text-muted">Reach Successfully</label>
+                                    <p>{{!isOnAction  && action.result.success }}</p>
+                                </div>
+                              </div>
+                            
+                        </div>
+                     </div>
+                </div>
+                <div class="card mt-2">
                     <div class="card-header">
                         <h4>Logs</h5>
                     </div>
@@ -288,81 +341,58 @@
                             <div class="card-header">
                                 <h4>Robot model</h4>
                             </div>
-                            <div class="card-body">
-                                <button :disabled="!connected" @click="showRobotModel" v-if="!isShowRobotModel">Turn On
-                                    Robot Model</button>
-                                <button :disabled="!connected" @click="closeRobotModel" v-else>Turn Off 3D robot
-                                    Model</button>
+                            <div class="card-body" id="robotModel">
+                                <div id="div3DViewer"></div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-8">
-                        <div class="card mt-2">
-                            <div class="card-header">
-                                <h4>Generated Map</h4>
-                            </div>
-                            <div class="card-body">
-                                <button :disabled="!connected" @click="showMap" v-if="!isShowMap">Turn On Map</button>
-                                <button :disabled="!connected" @click="closeMap" v-else>Turn Off Map</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-4">
+                        </div>                        
                         <div class="card mt-2">
                             <div class="card-header">
                                 <h4>Camera</h4>
                             </div>
                             <div class="card-body">
                                 <div id="cameraButton">
-                                    <button :disabled="!connected" @click="showCamera" v-if="!isShowCamera">Turn On
-                                        Camera</button>
-                                    <button :disabled="!connected" @click="closeCamera" v-else>Turn Off Camera</button>
+                                    <div id="divCamera"></div>
                                 </div>
                             </div>
-                        </div>
+                        </div>                    
                     </div>
-                    <div class="col-8">
+                    <div class="col-3">
+                        <div class="card mt-2">
+                            <div class="card-header">
+                                <h4>Generated Map</h4>
+                            </div>
+                            <div class="card-body">
+                                <div id="divMap"></div>
+                            </div>
+                        </div>
                         <div class="card mt-2">
                             <div class="card-header">
                                 <h4>Commands</h4>
                             </div>
-                            <div class="card-body">
+                            <div class="card-body"> 
+                                    <div class="card mt-2">
+                                        <div class="card">
+                                            <div class="card-body text-center">
+                                                <h2 class="text-center">Joystick</h2>
+                                                <hr>
+                                                <p>Some actions for the robot</p>
+                                                <div id="dragstartzone" @mousedown="startDrag" @mousemove="doDrag">
+                                                </div>
+                                                <div id="dragCircle" :style="dragCircleStyle"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
                             </div>
-                        </div>
+                        </div>                    
                     </div>
-                </div>
-                <div class="row">
-                    <div class="card mt-2">
-                        <div class="card">
-                            <div class="card-body text-center">
-                                <h2 class="text-center">Joystick</h2>
-                                <hr>
-                                <p>Some actions for the robot</p>
-                                <div id="dragstartzone" @mousedown="startDrag" @mousemove="doDrag">
-                                </div>
-                                <div id="dragCircle" :style="dragCircleStyle"></div>
+                    <div class="col-5">
+                        <div class="card mt-3">
+                            <div class="card-header">
+                                <h4>Waypoint Buttons</h4>
                             </div>
-                        </div>
-                    </div>
-                    <div class="card mt-2">
-                        <div class="card">
-                            <div class="card-body">
-                                <h2 class="text-center">Joystick values</h2>
-                                <hr />
-                                <p>Vertical: {{ joystick.vertical.toFixed(3) }}</p>
-                                <br />
-                                <p>Horizontal: {{ joystick.horizontal.toFixed(3) }}</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card mt-2">
-                        <div class="card">
-                            <p>Waypoint buttons are shown in red. Once the robot successfully visited the button will turn green</p>
-                            <p>You may cancel the goal with Cancel button at the bottom of the map</p>
-                            <div class="image-container">
-                                <img src="waypoint_button_map.png" alt="Waypoint Map">
+                            <div class="image-container" >
+                                <img src="waypoint_button_map.png" alt="Waypoint Map" >
                                 <button class="waypoint_button" id="WP1" :disabled="!connected || action.status.status == 1" @click="WP_button_clicked('WP1')" v-if="!is_wp_array_reached[0]">WP1</button>
                                 <button class="waypoint_button_done" id="WP1" :disabled="!connected || action.status.status == 1" @click="WP_button_clicked('WP1')"  v-else="!is_wp_array_reached[0]">WP1</button>
                                 <button class="waypoint_button" id="WP2" :disabled="!connected || action.status.status == 1" @click="WP_button_clicked('WP2')" v-if="!is_wp_array_reached[1]">WP2</button>
@@ -383,62 +413,13 @@
                                 <button class="waypoint_button_done" id="WP9" :disabled="!connected || action.status.status == 1" @click="WP_button_clicked('WP9')"  v-else="!is_wp_array_reached[8]">WP9</button>
                                 <button class="cancel_waypoint_button" :disabled="!connected || ![1].includes(action.status.status)" @click="cancelGoal">Cancel</button>
                             </div>
-                        </div>
+                        </div>                    
                     </div>
                 </div>
-                <div class="row">
 
-                    <div class="card mt-4">
-                        <div id="divMap" :class="{ invisible: !isShowMap }"></div>
-                    </div>
-                    <div class="card mt-4">
-                        <div id="div3DViewer" :class="{ invisible: !isShowRobotModel }"></div>
-                    </div>
-                    <div class="card mt-4">
-                        <div id="divCamera" :class="{ invisible: !isShowCamera }"></div>
-                    </div>
-                </div>
+
             </div>
-            <div class="col-md-12 col-sm-6" style="overflow:auto;">
-                <div class="row">
-                    <div class="col-md-12 text-center">
-                        <h5>Action client data</h5>
-                        <!--div>
-                            <label>Goal</label>
-                            <div>
-                                <label>X</label>
-                                <input type="number" v-model.number="action.goal.position.x" />
-                            </div>
-                            <div>
-                                <label>Y</label>
-                                <input type="number" v-model.number="action.goal.position.y" />
-                            </div>
-                            <button :disabled="!connected || action.status.status == 1" @click="sendGoal">Start</button>
-                            <button :disabled="!connected || ![1].includes(action.status.status)" @click="cancelGoal">Cancel</button>
-                        </div-->
-                        <hr />
-                        <div>
-                            <label class="text-muted">Feedback</label>
-                            <p>Position: {{ action.feedback.position }}</p>
-                            <p>State: {{ action.feedback.state }}</p>
-                        </div>
-                        <hr />
-                        <div>
-                            <label class="text-muted">Result</label>
-                            <p>Succeeded? {{ action.result.success }}</p>
-                        </div>
-                        <hr />
-                        <div>
-                            <label class="text-muted">Status</label>
-                            <p>{{ action.status.text }}</p>
-                        </div>
-                        <div>
-                            <label class="text-muted">Reach Successfully</label>
-                            <p>{{!isOnAction  && action.result.success }}</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+
         </div>
 
 
