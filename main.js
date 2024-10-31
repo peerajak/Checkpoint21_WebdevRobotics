@@ -113,8 +113,8 @@ var app = new Vue({
             if(this.mapViewer == null){
                     this.mapViewer = new ROS2D.Viewer({
                     divID: 'divMap',
-                    width: 340,
-                    height: 280
+                    width: 500,
+                    height: 300
                 })
                         // Setup the map client.
             this.mapGridClient = new ROS2D.OccupancyGridClient({
