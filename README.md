@@ -140,10 +140,10 @@ Change mapping.launch. in tortoisebot_slam to change the parameter of the map
     <param name="str" value="0.01"/>
     <param name="stt" value="0.02"/>
     <param name="resampleThreshold" value="0.5"/>
-    <param name="xmin" value="-1.25"/>
-    <param name="ymin" value="-1.25"/>
-    <param name="xmax" value="1.25"/>
-    <param name="ymax" value="1.25"/>
+    <param name="xmin" value="-1.75"/>
+    <param name="ymin" value="-1.75"/>
+    <param name="xmax" value="1.75"/>
+    <param name="ymax" value="1.75"/>
     <param name="llsamplerange" value="0.01"/>
     <param name="llsamplestep" value="0.01"/>
     <param name="lasamplerange" value="0.005"/>
