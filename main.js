@@ -12,7 +12,7 @@ var app = new Vue({
         isShowRobotModel: true,
         mapViewer: null,
         mapGridClient: null,
-        rosbridge_address: 'wss://i-044ca002c740c8699.robotigniteacademy.com/d3914234-3576-4419-a614-2c3450288207/rosbridge/',
+        rosbridge_address: 'wss://i-0731bdff0371ae157.robotigniteacademy.com/13aa71aa-c34d-4e3f-ab2f-5039eb9cd8a2/rosbridge/',
         port: '9090',
         // dragging data
         dragging: false,
@@ -113,7 +113,7 @@ var app = new Vue({
             if(this.mapViewer == null){
                     this.mapViewer = new ROS2D.Viewer({
                     divID: 'divMap',
-                    width: 370,
+                    width: 300,
                     height: 250
                 })
                         // Setup the map client.
