@@ -194,7 +194,7 @@ var app = new Vue({
         },
         setJoystickVals() {
             this.joystick.vertical = -1 * ((this.y / 200) - 0.5)
-            this.joystick.horizontal = +1 * ((this.x / 200) - 0.5)
+            this.joystick.horizontal = -1 * ((this.x / 200) - 0.5)
         },
         resetJoystickVals() {
             this.joystick.vertical = 0
