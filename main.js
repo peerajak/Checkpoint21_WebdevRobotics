@@ -12,7 +12,7 @@ var app = new Vue({
         isShowRobotModel: true,
         mapViewer: null,
         mapGridClient: null,
-        rosbridge_address: 'wss://i-0731bdff0371ae157.robotigniteacademy.com/13aa71aa-c34d-4e3f-ab2f-5039eb9cd8a2/rosbridge/',
+        rosbridge_address: 'ws://localhost',
         port: '9090',
         // dragging data
         dragging: false,
@@ -145,7 +145,7 @@ var app = new Vue({
         },
         setCamera: function() {
 
-            if(this.viewer == null){
+            /*if(this.viewer == null){
                 let without_wss = this.rosbridge_address.split('wss://')[1]
                 console.log(without_wss)
                 let domain = without_wss.split('/')[0] + '/' + without_wss.split('/')[1]
@@ -159,7 +159,7 @@ var app = new Vue({
                 topic: '/camera/image_raw',
                 ssl: true,
             })
-            }
+            }*/
 
         },
         startDrag() {
