@@ -12,7 +12,7 @@ var app = new Vue({
         isShowRobotModel: true,
         mapViewer: null,
         mapGridClient: null,
-        rosbridge_address: 'ws://localhost',
+        rosbridge_address: 'ws://localhost:9090',
         port: '9090',
         // dragging data
         dragging: false,
@@ -145,21 +145,19 @@ var app = new Vue({
         },
         setCamera: function() {
 
-            /*if(this.viewer == null){
-                let without_wss = this.rosbridge_address.split('wss://')[1]
-                console.log(without_wss)
-                let domain = without_wss.split('/')[0] + '/' + without_wss.split('/')[1]
+            if(this.viewer == null){
+                let domain = '127.0.0.1:11315'
                 console.log(domain)
-                let host = domain + '/cameras'
+                let host = domain 
                 this.viewer = new MJPEGCANVAS.Viewer({
                 divID: 'divCamera',
                 host: host,
                 width: 400,
                 height: 300,
-                topic: '/camera/image_raw',
-                ssl: true,
+                topic: 'raspicam_node/image',
+                ssl: false,
             })
-            }*/
+            }
 
         },
         startDrag() {
