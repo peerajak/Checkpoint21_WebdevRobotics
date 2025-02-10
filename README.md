@@ -47,6 +47,11 @@ rosrun course_web_dev_ros tortoisebot_action_server.py
 Terminal 5 Web Server
 
 ```
+cd ~/webpage_ws
+git clone https://github.com/peerajak/Checkpoint21_WebdevRobotics.git tortoisebot_webapp
+```
+
+```
 cd ~/webpage_ws/tortoisebot_webapp
 python -m http.server 7000
 ```
