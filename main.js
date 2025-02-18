@@ -210,7 +210,8 @@ var app = new Vue({
                 width: 400,
                 height: 300,
                 antialias: true,
-                fixedFrame: 'odom'
+                fixedFrame: 'odom',
+                axesDisplay : true
             })
 
             // Add a grid.
@@ -240,6 +241,37 @@ var app = new Vue({
                 rootObject: this.viewer3d.scene,
                 loader: ROS3D.COLLADA_LOADER_2
             })
+
+            //Setup TF Axes visualizer
+            var tfAxes1 = new ROS3D.TFAxes({
+                frame_id: "base_link",
+                shaftRadius : 0.02,
+                headRaidus : 0.07,
+                headLength : 0.2,
+                scale : 0.1,
+                tfClient : this.tfClient,
+                rootObject : this.viewer3d.scene,
+            });
+
+            var tfAxes2 = new ROS3D.TFAxes({
+                frame_id: "wheel_left",
+                shaftRadius : 0.02,
+                headRaidus : 0.07,
+                headLength : 0.2,
+                scale : 0.1,
+                tfClient : this.tfClient,
+                rootObject : this.viewer3d.scene,
+            });
+
+            var tfAxes3 = new ROS3D.TFAxes({
+                frame_id: "wheel_right",
+                shaftRadius : 0.02,
+                headRaidus : 0.07,
+                headLength : 0.2,
+                scale : 0.1,
+                tfClient : this.tfClient,
+                rootObject : this.viewer3d.scene,
+            });
 
 
         },

@@ -156,3 +156,8 @@ Change mapping.launch. in tortoisebot_slam to change the parameter of the map
 
     </node>
 ```
+
+
+### Add TF visualization to robot model
+
+![alt text](add_tf_to_robot_model.png)
