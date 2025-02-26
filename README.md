@@ -54,6 +54,7 @@ python -m http.server 7000
 Terminal 6 tf2_web server
 
 ```
+source ~/catkin_ws/devel/setup.bash
 roslaunch course_web_dev_ros tf2_web.launch
 ```
 
