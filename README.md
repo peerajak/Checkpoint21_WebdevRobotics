@@ -19,28 +19,28 @@ You may cancel the goal with Cancel button at the bottom of the map, while navig
 Terminal 1 Simulator
 
 ```
-source ~/simulation_ws/devel/setup.bash
+source ~/catkin_ws/devel/setup.bash
 roslaunch tortoisebot_gazebo tortoisebot_docking.launch
 ```
 
 Terminal 2 Rosbridge
 
 ```
-source ~/simulation_ws/devel/setup.bash
+source ~/catkin_ws/devel/setup.bash
 roslaunch course_web_dev_ros web.launch
 ```
 
 Terminal 3 Slam on Rviz
 
 ```
-source ~/simulation_ws/devel/setup.bash
+source ~/catkin_ws/devel/setup.bash
 roslaunch tortoisebot_slam mapping.launch
 ```
 
 Terminal 4 Action Server
 
 ```
-source ~/simulation_ws/devel/setup.bash
+source ~/catkin_ws/devel/setup.bash
 rosrun course_web_dev_ros tortoisebot_action_server.py
 ```
 
